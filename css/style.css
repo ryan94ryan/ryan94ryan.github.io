@@ -238,6 +238,36 @@ img { max-width: 100%; height: auto; display: block; }
   .mobile-menu { display: none !important; }
 }
 
+/* ========== Nav Featured Link ========== */
+.nav-links a.nav-featured {
+  color: var(--accent);
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  transition: background 0.25s ease, transform 0.25s ease;
+  animation: navFeaturedPulse 2.4s ease-in-out infinite;
+}
+.nav-links a.nav-featured:hover {
+  background: color-mix(in srgb, var(--accent) 24%, transparent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+.nav-links a.nav-featured::after { display: none; }
+.nav-links a.nav-featured::before { content: '🎮'; margin-right: 4px; }
+
+@keyframes navFeaturedPulse {
+  0%, 100% { box-shadow: 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+  50% { box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 45%, transparent); }
+}
+
+.mobile-menu a.nav-featured {
+  color: var(--accent);
+  font-weight: 600;
+}
+.mobile-menu a.nav-featured::before { content: '🎮 '; }
+
 /* ============================================
    Hero — Base
    ============================================ */
