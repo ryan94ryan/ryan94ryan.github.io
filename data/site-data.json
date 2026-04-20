@@ -284,5 +284,53 @@
       "enabled": false
     },
     "floating": []
-  }
+  },
+  "navOrder": [
+    {
+      "type": "custom",
+      "label": "銀狼祭品遊戲",
+      "url": "https://ryan94ryan.com/silverwolfgame/",
+      "featured": true,
+      "newTab": true
+    },
+    {
+      "type": "builtin",
+      "key": "games"
+    },
+    {
+      "type": "builtin",
+      "key": "gallery"
+    },
+    {
+      "type": "builtin",
+      "key": "playlists"
+    },
+    {
+      "type": "builtin",
+      "key": "videoShowcase"
+    },
+    {
+      "type": "builtin",
+      "key": "contentFeed"
+    },
+    {
+      "type": "builtin",
+      "key": "services"
+    },
+    {
+      "type": "builtin",
+      "key": "liveSchedule"
+    },
+    {
+      "type": "builtin",
+      "key": "about"
+    },
+    {
+      "type": "builtin",
+      "key": "support"
+    },
+    {
+      "type": "article"
+    }
+  ]
 }
