@@ -129,22 +129,51 @@
   }
 
   /* ---------- Dynamic Navigation ---------- */
-  function buildNav(sections) {
+  function buildNav(sections, navOrder, navExtra) {
     var navLinksEl = el('navLinks');
     var mobileMenuEl = el('mobileMenu');
-    var desktopHtml = '';
-    var mobileHtml = '';
+    var defaultBuiltin = ['games', 'gallery', 'playlists', 'videoShowcase', 'contentFeed', 'services', 'liveSchedule', 'about', 'support'];
 
-    var order = ['games', 'gallery', 'playlists', 'videoShowcase', 'contentFeed', 'services', 'liveSchedule', 'about', 'support'];
-    order.forEach(function (key) {
-      if (sections[key] && NAV_MAP[key]) {
-        desktopHtml += '<li><a href="' + NAV_MAP[key].href + '">' + NAV_MAP[key].label + '</a></li>';
-        mobileHtml += '<a href="' + NAV_MAP[key].href + '">' + NAV_MAP[key].label + '</a>';
+    // Backward compat: if navOrder missing, synthesize from defaults + legacy navExtra
+    var order;
+    if (Array.isArray(navOrder) && navOrder.length) {
+      order = navOrder;
+    } else {
+      var builtinEntries = defaultBuiltin.map(function (k) { return { type: 'builtin', key: k }; });
+      var startExtras = [], beforeArticleExtras = [], endExtras = [];
+      (Array.isArray(navExtra) ? navExtra : []).forEach(function (x) {
+        if (!x || !x.label || !x.url) return;
+        var e = { type: 'custom', label: x.label, url: x.url, featured: !!x.featured, newTab: x.newTab !== false };
+        if (x.position === 'start') startExtras.push(e);
+        else if (x.position === 'end') endExtras.push(e);
+        else beforeArticleExtras.push(e);
+      });
+      order = [].concat(startExtras, builtinEntries, beforeArticleExtras, [{ type: 'article' }], endExtras);
+    }
+
+    var items = [];
+    order.forEach(function (entry) {
+      if (!entry || !entry.type) return;
+      if (entry.type === 'builtin') {
+        var k = entry.key;
+        if (!k || !NAV_MAP[k] || !sections[k]) return;
+        items.push({ label: NAV_MAP[k].label, href: NAV_MAP[k].href, newTab: false, featured: !!entry.featured });
+      } else if (entry.type === 'article') {
+        items.push({ label: entry.label || '文章', href: entry.url || 'news.html', newTab: false, featured: !!entry.featured });
+      } else if (entry.type === 'custom') {
+        if (!entry.label || !entry.url) return;
+        items.push({ label: entry.label, href: entry.url, newTab: entry.newTab !== false, featured: !!entry.featured });
       }
     });
 
-    desktopHtml += '<li><a href="news.html">文章</a></li>';
-    mobileHtml += '<a href="news.html">文章</a>';
+    var desktopHtml = '', mobileHtml = '';
+    items.forEach(function (item) {
+      var attrs = '';
+      if (item.newTab) attrs += ' target="_blank" rel="noopener"';
+      if (item.featured) attrs += ' class="nav-featured"';
+      desktopHtml += '<li><a href="' + item.href + '"' + attrs + '>' + item.label + '</a></li>';
+      mobileHtml += '<a href="' + item.href + '"' + attrs + '>' + item.label + '</a>';
+    });
 
     navLinksEl.innerHTML = desktopHtml;
     mobileMenuEl.innerHTML = mobileHtml;
@@ -1000,7 +1029,7 @@
     applySectionToggles(sections);
 
     // Build dynamic navigation
-    buildNav(sections);
+    buildNav(sections, data.navOrder, data.navExtra);
 
     // Render all active sections
     if (sections.hero !== false) renderHero(data);
