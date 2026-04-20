@@ -1,0 +1,288 @@
+{
+  "template": "custom",
+  "sections": {
+    "hero": false,
+    "games": true,
+    "gallery": false,
+    "playlists": false,
+    "videoShowcase": false,
+    "contentFeed": true,
+    "services": false,
+    "liveSchedule": false,
+    "stats": false,
+    "about": true,
+    "support": true,
+    "social": true
+  },
+  "site": {
+    "title": "阿煙的家",
+    "description": "阿煙的網站",
+    "ogImage": "assets/images/og-image.jpg"
+  },
+  "hero": {
+    "tagline": "INDIE GAME DEVELOPER & CREATOR",
+    "heading": "你好啊旅行者",
+    "subtitle": "獨立遊戲開發者 · 數位創作者 · 用遊戲和圖畫說故事",
+    "ctaText": "查看作品 ↓",
+    "backgroundStyle": "waves",
+    "minHeightVh": 60
+  },
+  "about": {
+    "avatar": "assets/images/avatar.jpg",
+    "bio": "阿煙，來自馬來西亞，現居台灣。\n獨立遊戲開發者，喜歡用遊戲說故事。\n平時也畫圖、開台、發廢文。\n如果喜歡我的作品，歡迎追蹤或打賞支持！",
+    "skills": [
+      "遊戲企劃",
+      "遊戲製作",
+      "美術設計",
+      "漫畫繪製",
+      "影片後製"
+    ],
+    "contactEmail": "rastudiotw@gmail.com",
+    "collaborationNote": "如有網頁小遊戲開發合作需求，歡迎來信聯繫。"
+  },
+  "games": [
+    {
+      "id": "avoid-death",
+      "name": "迴避我的死亡結局",
+      "genre": "武俠文字冒險 RPG",
+      "description": "穿越重生的反派主角，在柳州十五日的輪迴中迴避死亡結局",
+      "image": "assets/images/games/0.png",
+      "platforms": [
+        "Steam"
+      ],
+      "links": {
+        "steam": "https://store.steampowered.com/app/4510910/"
+      },
+      "tags": [
+        "武俠",
+        "文字冒險",
+        "多結局"
+      ],
+      "featured": true
+    },
+    {
+      "id": "ryanpuzzle",
+      "name": "隨意拼圖 作者自己也會卡關",
+      "genre": "益智拼圖",
+      "description": "手機空間不足了，放在拼圖遊戲裡吧",
+      "image": "assets/images/games/9.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.RAstu.ryanpuzzle"
+      },
+      "tags": [],
+      "featured": false
+    },
+    {
+      "id": "arrow-chain",
+      "name": "Arrow Chain 只有1%的人能通關",
+      "genre": "休閒益智",
+      "description": "考驗你的邏輯與觀察力的箭頭連鎖消除遊戲",
+      "image": "assets/images/games/8.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.RAstu.voidtales"
+      },
+      "tags": [
+        "益智",
+        "休閒"
+      ],
+      "featured": false
+    },
+    {
+      "id": "word-game",
+      "name": "填字遊戲",
+      "genre": "文字益智",
+      "description": "動動腦，填入正確的字完成挑戰",
+      "image": "assets/images/games/1.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.RAstudio.WordGame"
+      },
+      "tags": [
+        "文字",
+        "益智"
+      ],
+      "featured": false
+    },
+    {
+      "id": "vtuber-sim",
+      "name": "Vtuber 模擬器",
+      "genre": "經營模擬",
+      "description": "打造你的虛擬偶像帝國",
+      "image": "assets/images/games/4.png",
+      "platforms": [
+        "Steam",
+        "Android"
+      ],
+      "links": {
+        "steam": "https://store.steampowered.com/app/1704060/Vtuber_Simulator__Vtuber/",
+        "android": "https://play.google.com/store/apps/details?id=com.RAstudio.VtuberCompany"
+      },
+      "tags": [
+        "經營",
+        "模擬"
+      ],
+      "featured": false
+    },
+    {
+      "id": "instant-leveling",
+      "name": "我快速升級",
+      "genre": "放置 RPG",
+      "description": "掛機升級，體驗極速成長的爽快感",
+      "image": "assets/images/games/2.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.RAstu.InstantLeveling"
+      },
+      "tags": [
+        "放置",
+        "RPG"
+      ],
+      "featured": false
+    },
+    {
+      "id": "god-of-weapon",
+      "name": "武器鍛造師",
+      "genre": "放置經營",
+      "description": "鍛造傳說武器，成為最強工匠",
+      "image": "assets/images/games/7.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.RAstu.GodofWeapon"
+      },
+      "tags": [
+        "放置",
+        "經營"
+      ],
+      "featured": false
+    },
+    {
+      "id": "mace",
+      "name": "創世魔法師",
+      "genre": "放置 RPG",
+      "description": "化身魔法師，在奇幻世界中冒險成長",
+      "image": "assets/images/games/5.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.Rastudio.Mace"
+      },
+      "tags": [
+        "放置",
+        "RPG"
+      ],
+      "featured": false
+    },
+    {
+      "id": "evil-king",
+      "name": "魔王會復活",
+      "genre": "策略 RPG",
+      "description": "魔王不斷復活，策略性地擊退敵人",
+      "image": "assets/images/games/6.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.RAstu.EvilKing"
+      },
+      "tags": [
+        "策略",
+        "RPG"
+      ],
+      "featured": false
+    }
+  ],
+  "gallery": {
+    "heading": "作品集",
+    "items": []
+  },
+  "playlists": [],
+  "videoShowcase": [],
+  "services": [],
+  "liveSchedule": {
+    "heading": "直播時間表",
+    "platform": "twitch",
+    "channelUrl": "",
+    "schedule": []
+  },
+  "stats": [],
+  "content": {
+    "youtubeVideos": [
+      {
+        "id": "https://youtube.com/shorts/6HU0Vw8GZeg?si=nRgQLWWTmsAJHOlI",
+        "title": "武俠遊戲來了！"
+      },
+      {
+        "id": "https://youtube.com/shorts/W519R7iW6Lk?si=HLN9HC5WbPyPA1EL",
+        "title": "做了"
+      },
+      {
+        "id": "https://youtube.com/shorts/Rk23z5fTsDM?si=LSW3Nk09SqGnmeRP",
+        "title": "又做了"
+      }
+    ],
+    "instagramPosts": [
+      {
+        "url": "https://www.instagram.com/ryancomic/p/DTMmZcnkTds/"
+      },
+      {
+        "url": "https://www.instagram.com/ryancomic/p/DTUKJWmgQBd/"
+      },
+      {
+        "url": "https://www.instagram.com/p/DUz4gXrke8j/"
+      },
+      {
+        "url": "https://www.instagram.com/p/DWA1HFTkY4a/"
+      },
+      {
+        "url": "https://www.instagram.com/p/DWk77TMkSrf"
+      }
+    ],
+    "twitchChannel": "ryan337994"
+  },
+  "support": {
+    "heading": "支持我",
+    "message": "如果喜歡我的作品，可以請我喝杯咖啡 ☕",
+    "opayUrl": "https://payment.opay.tw/Broadcaster/Donate/BD525DE66653BDCF4FC8B606EFCBB09E"
+  },
+  "social": {
+    "facebook": "https://www.facebook.com/kinoko337994",
+    "instagram": "https://www.instagram.com/ryancomic/",
+    "twitter": "https://twitter.com/ryan_94_ryan",
+    "youtube": "https://www.youtube.com/channel/UCRN1HvekTOo7X-d-DYf64Gg",
+    "twitch": "https://www.twitch.tv/ryan337994",
+    "bahamut": "https://home.gamer.com.tw/creation.php?owner=kinoko94",
+    "discord": "https://discord.gg/mmgPZ2YKuA"
+  },
+  "sectionsOrder": [
+    "hero",
+    "about",
+    "games",
+    "gallery",
+    "playlists",
+    "videoShowcase",
+    "contentFeed",
+    "services",
+    "liveSchedule",
+    "stats",
+    "support"
+  ],
+  "notices": {
+    "main": {
+      "enabled": false
+    },
+    "floating": []
+  }
+}

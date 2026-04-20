@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Template — 內容管理工具</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ===== Wizard Overlay ===== -->
+  <div class="wizard-overlay" id="wizardOverlay">
+    <div class="wizard-box">
+      <h2>歡迎使用 Portfolio Template</h2>
+      <p>請選擇你的身份類型，系統會自動幫你開啟對應的區塊：</p>
+      <div class="wizard-options">
+        <button class="wizard-option" data-template="gamedev">
+          <span class="wizard-icon">🎮</span>
+          <strong>遊戲開發者</strong>
+          <small>遊戲作品集 + 創作動態</small>
+        </button>
+        <button class="wizard-option" data-template="videoeditor">
+          <span class="wizard-icon">🎬</span>
+          <strong>剪輯師</strong>
+          <small>影片作品 + 播放清單 + 服務</small>
+        </button>
+        <button class="wizard-option" data-template="illustrator">
+          <span class="wizard-icon">🎨</span>
+          <strong>插畫 / 圖文作家</strong>
+          <small>圖片作品集 + 服務項目</small>
+        </button>
+        <button class="wizard-option" data-template="youtuber">
+          <span class="wizard-icon">📺</span>
+          <strong>YouTuber</strong>
+          <small>播放清單 + 影片作品 + 動態</small>
+        </button>
+        <button class="wizard-option" data-template="vtuber">
+          <span class="wizard-icon">🧸</span>
+          <strong>VTuber</strong>
+          <small>直播時間 + 作品集 + 動態</small>
+        </button>
+        <button class="wizard-option" data-template="custom">
+          <span class="wizard-icon">⚙️</span>
+          <strong>自訂</strong>
+          <small>自己選要開哪些區塊</small>
+        </button>
+      </div>
+      <p class="wizard-hint">之後隨時可以在「區塊管理」裡修改</p>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="admin-header">
+    <h1>Portfolio Template — 內容管理工具</h1>
+    <div class="admin-header-actions">
+      <button class="btn btn-success" id="btnPreview">👁 側邊預覽</button>
+      <button class="btn btn-success" id="btnPreviewTab">🔗 新分頁預覽</button>
+      <button class="btn btn-secondary" id="btnPickFiles">📁 選擇檔案</button>
+      <input type="file" id="filePicker" accept="image/*" multiple style="display:none;">
+      <button class="btn btn-secondary" id="btnImport">📂 匯入 JSON</button>
+      <button class="btn btn-primary" id="btnExport">💾 匯出儲存</button>
+      <button class="btn btn-publish" id="btnPublish">🚀 發布到 GitHub</button>
+      <button class="btn btn-danger btn-sm" id="btnReset">重置</button>
+      <input type="file" id="fileInput" accept=".json" style="display:none;">
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <!-- Sidebar Tabs -->
+    <nav class="admin-sidebar">
+      <button class="admin-tab active" data-tab="guide">📖 使用教學</button>
+      <button class="admin-tab" data-tab="sections">🧩 區塊管理</button>
+      <button class="admin-tab" data-tab="hero">🏠 首頁橫幅</button>
+      <button class="admin-tab" data-tab="games">🎮 遊戲作品</button>
+      <button class="admin-tab" data-tab="gallery">🎨 圖片作品集</button>
+      <button class="admin-tab" data-tab="playlists">📋 播放清單</button>
+      <button class="admin-tab" data-tab="videos">🎬 影片作品</button>
+      <button class="admin-tab" data-tab="content">📺 創作動態</button>
+      <button class="admin-tab" data-tab="servicesTab">🛠️ 服務項目</button>
+      <button class="admin-tab" data-tab="scheduleTab">📅 直播時間</button>
+      <button class="admin-tab" data-tab="statsTab">📊 數據統計</button>
+      <button class="admin-tab" data-tab="about">👤 關於我</button>
+      <button class="admin-tab" data-tab="support">☕ 支持我</button>
+      <button class="admin-tab" data-tab="social">🔗 社群連結</button>
+      <button class="admin-tab" data-tab="site">⚙️ 網站設定</button>
+    </nav>
+
+    <!-- Content -->
+    <main class="admin-content">
+
+      <!-- ===== 使用教學 ===== -->
+      <section class="admin-section active" id="sec-guide">
+        <h2>使用教學</h2>
+
+        <div class="guide-box guide-blue">
+          <h3>👋 歡迎！這個工具讓你不碰程式碼就能修改網站內容</h3>
+          <p>所有內容都存在一個 JSON 檔案裡，修改步驟超簡單：</p>
+          <ol>
+            <li><strong>編輯</strong> — 點左邊選單，修改你要改的內容</li>
+            <li><strong>匯出</strong> — 點右上角 <code>💾 匯出儲存</code>，會下載 <code>site-data.json</code></li>
+            <li><strong>替換</strong> — 把下載的檔案放到網站的 <code>data/</code> 資料夾，覆蓋舊檔</li>
+          </ol>
+        </div>
+
+        <div class="guide-box guide-yellow">
+          <h3>📺 YouTube 影片怎麼填？</h3>
+          <p><strong>直接貼 YouTube 網址就好！</strong>系統會自動辨識。以下格式都支援：</p>
+          <ul>
+            <li><code>https://www.youtube.com/watch?v=abc123</code> — 一般影片</li>
+            <li><code>https://youtu.be/abc123</code> — 短網址</li>
+            <li><code>https://youtube.com/shorts/abc123</code> — Shorts 短影音</li>
+            <li><code>abc123</code> — 直接填 ID 也可以</li>
+          </ul>
+          <p>Shorts 會自動用直式排版顯示！</p>
+        </div>
+
+        <div class="guide-box guide-green">
+          <h3>📸 Instagram 貼文怎麼填？</h3>
+          <p><strong>直接貼 IG 貼文網址就好！</strong>系統會自動嵌入顯示。</p>
+          <ul>
+            <li>打開 IG 貼文 → 點右上角 <code>⋯</code> → 複製連結</li>
+            <li>貼到「創作動態」→「Instagram 貼文」欄位</li>
+            <li>不需要截圖，不需要上傳圖片</li>
+          </ul>
+        </div>
+
+        <!-- GitHub Pages 教學 -->
+        <div class="guide-box guide-blue" id="guideGithub">
+          <h3>🚀 如何上架到 GitHub Pages（免費架站）</h3>
+          <ol>
+            <li>註冊 <a href="https://github.com" target="_blank">GitHub</a> 帳號（免費）</li>
+            <li>安裝 <a href="https://desktop.github.com" target="_blank">GitHub Desktop</a>（圖形化工具，不用打指令）</li>
+            <li>打開 GitHub Desktop → File → Add Local Repository → 選擇這個網站資料夾</li>
+            <li>點 <strong>Publish repository</strong>（名字隨意，例如 <code>myportfolio</code>）</li>
+            <li>上傳完成後，到 GitHub 網站 → 你的 repo → Settings → Pages</li>
+            <li>Source 選 <code>main</code> branch → Save</li>
+            <li>等 1-2 分鐘，你的網站就上線了！網址是 <code>https://你的帳號.github.io/repo名稱/</code></li>
+          </ol>
+        </div>
+
+        <!-- 內容更新教學 -->
+        <div class="guide-box guide-green" id="guideUpdate">
+          <h3>🚀 如何更新網站內容（一鍵發布）</h3>
+          <ol>
+            <li>打開這個管理工具（<code>admin.html</code>），修改你要改的內容</li>
+            <li>點右上角 <code>🚀 發布到 GitHub</code></li>
+            <li>首次使用會要求填入 GitHub 設定（之後會自動記住）</li>
+            <li>發布成功後，等 1-2 分鐘網站就更新了！</li>
+          </ol>
+          <p style="margin-top:0.5rem;"><strong>備用方式：</strong>也可以用 <code>💾 匯出儲存</code> 下載 JSON，手動上傳到 GitHub。</p>
+        </div>
+
+        <!-- GitHub Token 教學 -->
+        <div class="guide-box guide-yellow" id="guideToken">
+          <h3>🔑 如何取得 GitHub Personal Access Token</h3>
+          <ol>
+            <li>登入 GitHub → 右上角頭像 → <strong>Settings</strong></li>
+            <li>左側選單最下面 → <strong>Developer settings</strong></li>
+            <li>選 <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
+            <li>點 <strong>Generate new token (classic)</strong></li>
+            <li>Note 填「Portfolio Admin」，Expiration 選你想要的期限</li>
+            <li>權限勾選 <strong>repo</strong>（整個 repo 區塊打勾）</li>
+            <li>點 <strong>Generate token</strong>，複製產生的 <code>ghp_</code> 開頭的 token</li>
+          </ol>
+          <p><strong>注意：</strong>Token 只會顯示一次，請妥善保存。如果忘了可以重新產生一個。</p>
+        </div>
+
+        <!-- 網域教學 -->
+        <div class="guide-box guide-yellow" id="guideDomain">
+          <h3>🌐 自訂網域（購買＆設定）</h3>
+          <p><strong>想要自己的網域名稱？</strong>例如 <code>www.yourname.com</code></p>
+          <ol>
+            <li><strong>購買網域</strong>：到以下平台購買（通常一年 300-600 台幣）
+              <ul>
+                <li><a href="https://www.namecheap.com" target="_blank">Namecheap</a>（推薦，介面簡單）</li>
+                <li><a href="https://www.godaddy.com" target="_blank">GoDaddy</a></li>
+                <li><a href="https://www.gandi.net" target="_blank">Gandi</a></li>
+              </ul>
+            </li>
+            <li><strong>DNS 設定</strong>：到你的網域管理後台，新增以下記錄：
+              <ul>
+                <li>A 記錄 → <code>@</code> → <code>185.199.108.153</code></li>
+                <li>A 記錄 → <code>@</code> → <code>185.199.109.153</code></li>
+                <li>A 記錄 → <code>@</code> → <code>185.199.110.153</code></li>
+                <li>A 記錄 → <code>@</code> → <code>185.199.111.153</code></li>
+                <li>CNAME 記錄 → <code>www</code> → <code>你的帳號.github.io</code></li>
+              </ul>
+            </li>
+            <li><strong>建立 CNAME 檔案</strong>：在網站根目錄建立一個叫 <code>CNAME</code> 的檔案（無副檔名），裡面只寫你的網域，例如 <code>www.yourname.com</code></li>
+            <li><strong>GitHub 設定</strong>：repo → Settings → Pages → Custom domain → 填入你的網域 → 勾選 Enforce HTTPS</li>
+            <li>等 30 分鐘～幾小時，DNS 生效後就能用了！</li>
+          </ol>
+          <p><strong>更換網域：</strong>只需修改 <code>CNAME</code> 檔案的內容 + 修改 DNS 設定即可。</p>
+        </div>
+
+        <div class="guide-box guide-gray">
+          <h3>💡 小提醒</h3>
+          <ul>
+            <li>每次改完記得按 <code>💾 匯出儲存</code>，不然修改會消失</li>
+            <li>改壞了可以按 <code>📂 匯入 JSON</code> 重新載入原本的檔案</li>
+            <li>圖片要自己放到 <code>assets/images/</code> 資料夾</li>
+            <li>可以用 <code>📁 選擇檔案</code> 按鈕來瀏覽 assets 裡的檔案</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ===== 區塊管理 ===== -->
+      <section class="admin-section" id="sec-sections">
+        <h2>區塊管理</h2>
+        <p class="sec-desc">選擇你的身份類型，或自訂要顯示哪些區塊</p>
+
+        <div class="content-block">
+          <h3>快速設定（選一個身份）</h3>
+          <div class="template-buttons" id="templateButtons">
+            <button class="btn btn-secondary template-btn" data-tpl="gamedev">🎮 遊戲開發者</button>
+            <button class="btn btn-secondary template-btn" data-tpl="videoeditor">🎬 剪輯師</button>
+            <button class="btn btn-secondary template-btn" data-tpl="illustrator">🎨 插畫家</button>
+            <button class="btn btn-secondary template-btn" data-tpl="youtuber">📺 YouTuber</button>
+            <button class="btn btn-secondary template-btn" data-tpl="vtuber">🧸 VTuber</button>
+            <button class="btn btn-secondary template-btn" data-tpl="custom">⚙️ 全部自訂</button>
+          </div>
+        </div>
+
+        <div class="content-block">
+          <h3>區塊開關</h3>
+          <p class="sec-desc">開啟/關閉各個區塊，關掉的區塊不會顯示在網站上</p>
+          <div id="sectionToggles"></div>
+        </div>
+      </section>
+
+      <!-- ===== Hero ===== -->
+      <section class="admin-section" id="sec-hero">
+        <h2>首頁橫幅</h2>
+        <p class="sec-desc">訪客第一眼看到的區塊</p>
+        <div class="field">
+          <label>英文標語（小字）</label>
+          <input type="text" id="hero-tagline" placeholder="INDIE GAME DEVELOPER & CREATOR">
+        </div>
+        <div class="field">
+          <label>主標題（大字）<span class="required">*</span></label>
+          <input type="text" id="hero-heading" placeholder="你好啊旅行者">
+        </div>
+        <div class="field">
+          <label>副標題</label>
+          <input type="text" id="hero-subtitle" placeholder="獨立遊戲開發者 · 數位創作者">
+        </div>
+        <div class="field">
+          <label>按鈕文字</label>
+          <input type="text" id="hero-ctaText" placeholder="查看作品 ↓">
+        </div>
+        <div class="field">
+          <label>背景樣式</label>
+          <div class="bg-style-select" id="bgStyleSelect">
+            <div class="bg-style-option selected" data-style="minimal">
+              <div class="bg-style-preview bg-preview-minimal"><div class="bg-dot"></div><div class="bg-dot"></div></div>
+              <span>極簡</span>
+            </div>
+            <div class="bg-style-option" data-style="gradient">
+              <div class="bg-style-preview bg-preview-gradient"></div>
+              <span>漸層</span>
+            </div>
+            <div class="bg-style-option" data-style="particles">
+              <div class="bg-style-preview bg-preview-particles"><div class="bg-particle"></div><div class="bg-particle"></div><div class="bg-particle"></div><div class="bg-particle"></div><div class="bg-particle"></div></div>
+              <span>粒子</span>
+            </div>
+            <div class="bg-style-option" data-style="waves">
+              <div class="bg-style-preview bg-preview-waves"><div class="bg-wave"></div><div class="bg-wave"></div></div>
+              <span>波浪</span>
+            </div>
+            <div class="bg-style-option" data-style="aurora">
+              <div class="bg-style-preview bg-preview-aurora"><div class="bg-aurora-blob"></div><div class="bg-aurora-blob"></div></div>
+              <span>極光</span>
+            </div>
+            <div class="bg-style-option" data-style="cyber">
+              <div class="bg-style-preview bg-preview-cyber"><div class="bg-grid-line"></div><div class="bg-grid-line"></div><div class="bg-scan"></div></div>
+              <span>科技</span>
+            </div>
+          </div>
+          <input type="hidden" id="hero-backgroundStyle" value="minimal">
+        </div>
+      </section>
+
+      <!-- ===== Games ===== -->
+      <section class="admin-section" id="sec-games">
+        <h2>遊戲作品</h2>
+        <div id="gamesEditorList"></div>
+        <button class="btn btn-primary" id="btnAddGame" style="margin-top:1rem;">+ 新增遊戲</button>
+      </section>
+
+      <!-- ===== Gallery ===== -->
+      <section class="admin-section" id="sec-gallery">
+        <h2>圖片作品集</h2>
+        <div class="field">
+          <label>區塊標題</label>
+          <input type="text" id="gallery-heading" placeholder="作品集">
+        </div>
+        <div id="galleryEditorList"></div>
+        <button class="btn btn-primary" id="btnAddGalleryItem" style="margin-top:1rem;">+ 新增圖片</button>
+      </section>
+
+      <!-- ===== Playlists ===== -->
+      <section class="admin-section" id="sec-playlists">
+        <h2>播放清單</h2>
+        <div class="help-tip">到 YouTube → 播放清單 → 分享 → 複製連結，會得到類似 <code>PLxxxxxxxx</code> 的 ID</div>
+        <div id="playlistEditorList"></div>
+        <button class="btn btn-primary" id="btnAddPlaylist" style="margin-top:1rem;">+ 新增播放清單</button>
+      </section>
+
+      <!-- ===== Video Showcase ===== -->
+      <section class="admin-section" id="sec-videos">
+        <h2>影片作品</h2>
+        <div class="help-tip">每支影片會顯示縮圖卡片，點擊後彈出播放視窗</div>
+        <div id="videoEditorList"></div>
+        <button class="btn btn-primary" id="btnAddVideo" style="margin-top:1rem;">+ 新增影片</button>
+      </section>
+
+      <!-- ===== Content Feed ===== -->
+      <section class="admin-section" id="sec-content">
+        <h2>創作動態</h2>
+
+        <div class="content-block">
+          <h3>📺 YouTube 影片</h3>
+          <div class="help-tip">直接貼 YouTube 網址即可！支援一般影片、短網址、Shorts 等各種格式。</div>
+          <div id="ytEditorList"></div>
+          <button class="btn btn-secondary btn-sm" id="btnAddYt">+ 新增影片</button>
+        </div>
+
+        <div class="content-block">
+          <h3>📸 Instagram 貼文</h3>
+          <div class="help-tip">直接貼 IG 貼文網址，會自動嵌入顯示。不需要截圖！</div>
+          <div id="igEditorList"></div>
+          <button class="btn btn-secondary btn-sm" id="btnAddIg">+ 新增貼文</button>
+        </div>
+
+        <div class="content-block">
+          <h3>🟣 Twitch 直播</h3>
+          <div class="field">
+            <label>頻道名稱</label>
+            <input type="text" id="content-twitchChannel" placeholder="例如：ryan337994">
+            <p class="field-hint">就是你的 Twitch 網址最後面的名字</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Services ===== -->
+      <section class="admin-section" id="sec-servicesTab">
+        <h2>服務項目</h2>
+        <div class="help-tip">展示你提供的專業服務，例如：影片剪輯、插畫繪製、動態設計等</div>
+        <div id="serviceEditorList"></div>
+        <button class="btn btn-primary" id="btnAddService" style="margin-top:1rem;">+ 新增服務</button>
+      </section>
+
+      <!-- ===== Live Schedule ===== -->
+      <section class="admin-section" id="sec-scheduleTab">
+        <h2>直播時間表</h2>
+        <div class="field">
+          <label>區塊標題</label>
+          <input type="text" id="schedule-heading" placeholder="直播時間表">
+        </div>
+        <div class="field">
+          <label>頻道連結</label>
+          <input type="url" id="schedule-channelUrl" placeholder="https://www.twitch.tv/yourname">
+        </div>
+        <div id="scheduleEditorList"></div>
+        <button class="btn btn-primary" id="btnAddSchedule" style="margin-top:1rem;">+ 新增時段</button>
+      </section>
+
+      <!-- ===== Stats ===== -->
+      <section class="admin-section" id="sec-statsTab">
+        <h2>數據統計</h2>
+        <div class="help-tip">展示你的成就數據，例如：完成專案 100+、合作客戶 50+ 等</div>
+        <div id="statEditorList"></div>
+        <button class="btn btn-primary" id="btnAddStat" style="margin-top:1rem;">+ 新增數據</button>
+      </section>
+
+      <!-- ===== About ===== -->
+      <section class="admin-section" id="sec-about">
+        <h2>關於我</h2>
+        <div class="field">
+          <label>頭像圖片路徑</label>
+          <div class="field-with-picker">
+            <input type="text" id="about-avatar" placeholder="assets/images/avatar.jpg">
+            <button class="btn btn-sm btn-secondary pick-file-btn" data-target="about-avatar">📁</button>
+          </div>
+          <img class="img-preview" id="about-avatar-preview" style="display:none;">
+          <p class="field-hint">把圖片放到 assets/images/ 資料夾，在這裡填檔名</p>
+        </div>
+        <div class="field">
+          <label>自我介紹</label>
+          <textarea id="about-bio" rows="5" placeholder="介紹自己，按 Enter 換行"></textarea>
+        </div>
+        <div class="field">
+          <label>技能標籤</label>
+          <div class="tags-editor" id="about-skills-editor"></div>
+          <p class="field-hint">輸入後按 Enter 新增，點 × 刪除</p>
+        </div>
+        <div class="field">
+          <label>聯絡 Email</label>
+          <input type="email" id="about-contactEmail" placeholder="your@email.com">
+        </div>
+        <div class="field">
+          <label>合作說明</label>
+          <input type="text" id="about-collaborationNote" placeholder="如有合作需求，歡迎來信聯繫">
+        </div>
+      </section>
+
+      <!-- ===== Support ===== -->
+      <section class="admin-section" id="sec-support">
+        <h2>支持我 / 打賞</h2>
+        <div class="field">
+          <label>區塊標題</label>
+          <input type="text" id="support-heading" placeholder="支持我">
+        </div>
+        <div class="field">
+          <label>說明文字</label>
+          <input type="text" id="support-message" placeholder="如果喜歡我的作品，可以請我喝杯咖啡">
+        </div>
+        <div class="field">
+          <label>歐付寶打賞連結 <span class="required">*</span></label>
+          <input type="url" id="support-opayUrl" placeholder="https://payment.opay.tw/...">
+        </div>
+      </section>
+
+      <!-- ===== Social ===== -->
+      <section class="admin-section" id="sec-social">
+        <h2>社群連結</h2>
+        <div class="help-tip">留空的平台不會顯示在網站上</div>
+        <div class="field"><label>Facebook</label><input type="url" id="social-facebook" placeholder="https://www.facebook.com/..."></div>
+        <div class="field"><label>Instagram</label><input type="url" id="social-instagram" placeholder="https://www.instagram.com/..."></div>
+        <div class="field"><label>Twitter / X</label><input type="url" id="social-twitter" placeholder="https://twitter.com/..."></div>
+        <div class="field"><label>YouTube</label><input type="url" id="social-youtube" placeholder="https://www.youtube.com/..."></div>
+        <div class="field"><label>Twitch</label><input type="url" id="social-twitch" placeholder="https://www.twitch.tv/..."></div>
+        <div class="field"><label>巴哈姆特</label><input type="url" id="social-bahamut" placeholder="https://home.gamer.com.tw/..."></div>
+        <div class="field"><label>Discord</label><input type="url" id="social-discord" placeholder="https://discord.gg/..."></div>
+      </section>
+
+      <!-- ===== Site Settings ===== -->
+      <section class="admin-section" id="sec-site">
+        <h2>網站設定</h2>
+        <p class="sec-desc">SEO 用的基本資訊，一般不需要改</p>
+        <div class="field">
+          <label>網站標題</label>
+          <input type="text" id="site-title">
+        </div>
+        <div class="field">
+          <label>網站描述</label>
+          <input type="text" id="site-description">
+        </div>
+        <div class="field">
+          <label>OG Image 路徑</label>
+          <div class="field-with-picker">
+            <input type="text" id="site-ogImage" placeholder="assets/images/og-image.jpg">
+            <button class="btn btn-sm btn-secondary pick-file-btn" data-target="site-ogImage">📁</button>
+          </div>
+          <img class="img-preview" id="site-ogImage-preview" style="display:none;">
+          <p class="field-hint">分享到 Facebook / LINE 時顯示的縮圖</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Preview Panel -->
+  <div class="preview-panel" id="previewPanel">
+    <div class="preview-header">
+      <span>即時預覽</span>
+      <div class="preview-actions">
+        <button class="btn btn-sm btn-primary" id="btnPreviewRefresh">🔄 重新整理</button>
+        <button class="btn btn-sm btn-secondary" id="btnPreviewClose">&times; 關閉</button>
+      </div>
+    </div>
+    <iframe id="previewIframe" src="index.html"></iframe>
+  </div>
+
+  <!-- GitHub Settings Modal -->
+  <div class="gh-modal-overlay" id="ghModal">
+    <div class="gh-modal">
+      <h2>GitHub 發布設定</h2>
+      <p class="gh-modal-desc">首次使用需要設定，之後會自動記住</p>
+      <div class="field">
+        <label>GitHub 帳號名稱</label>
+        <input type="text" id="gh-owner" placeholder="例如：ryan94ryan">
+        <p class="field-hint">你的 GitHub 使用者名稱</p>
+      </div>
+      <div class="field">
+        <label>Repository 名稱</label>
+        <input type="text" id="gh-repo" placeholder="例如：myportfolio">
+        <p class="field-hint">你的網站 repo 名稱</p>
+      </div>
+      <div class="field">
+        <label>Personal Access Token</label>
+        <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
+        <p class="field-hint">到 GitHub → Settings → Developer settings → Personal access tokens 產生</p>
+      </div>
+      <div class="field">
+        <label>分支名稱</label>
+        <input type="text" id="gh-branch" placeholder="main" value="main">
+      </div>
+      <div class="gh-modal-actions">
+        <button class="btn btn-secondary" id="ghCancel">取消</button>
+        <button class="btn btn-publish" id="ghSaveAndPublish">儲存並發布</button>
+      </div>
+      <div class="gh-modal-footer">
+        <button class="btn btn-sm btn-secondary" id="ghClearSettings">清除已儲存的設定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章</title>
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; font-family: var(--font-body); }
+  </style>
+</head>
+<body>
+  <div class="article-page">
+    <a href="news.html" class="articles-back">&larr; 回文章列表</a>
+    <div id="articleRoot"><div class="article-loading">載入中…</div></div>
+  </div>
+
+  <!-- Markdown renderer (lightweight, CSP-safe via CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script>
+  (function () {
+    var root = document.getElementById('articleRoot');
+
+    function esc(s) {
+      var d = document.createElement('div');
+      d.textContent = s == null ? '' : s;
+      return d.innerHTML;
+    }
+
+    function formatDate(d) {
+      if (!d) return '';
+      var parts = d.split('-');
+      if (parts.length !== 3) return d;
+      return parts[0] + ' / ' + parts[1] + ' / ' + parts[2];
+    }
+
+    function getSlug() {
+      var m = location.search.match(/[?&]slug=([^&]+)/);
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    function sanitizeMarkdownHtml(html) {
+      // Block inline <script> / event handlers. marked v12 doesn't auto-sanitize but output is
+      // limited to our own markdown, so this is a minimal safeguard.
+      return html.replace(/<script[\s\S]*?<\/script>/gi, '')
+                 .replace(/\son[a-z]+="[^"]*"/gi, '')
+                 .replace(/javascript:/gi, '#');
+    }
+
+    function render(data) {
+      document.title = (data.title || '文章') + ' — 阿煙';
+
+      var tags = (data.tags || []).map(function (t) {
+        return '<span class="article-card-tag">' + esc(t) + '</span>';
+      }).join('');
+
+      var cover = data.cover
+        ? '<div class="article-cover"><img src="' + esc(data.cover) + '" alt=""></div>'
+        : '';
+
+      var html = '';
+      if (typeof marked !== 'undefined' && marked.parse) {
+        try { html = sanitizeMarkdownHtml(marked.parse(data.content || '')); }
+        catch (e) { html = '<pre>' + esc(data.content || '') + '</pre>'; }
+      } else {
+        html = '<pre>' + esc(data.content || '') + '</pre>';
+      }
+
+      root.innerHTML =
+        cover +
+        '<h1 class="article-title">' + esc(data.title || '(未命名)') + '</h1>' +
+        '<div class="article-meta">' +
+          '<span>' + esc(formatDate(data.date)) + '</span>' +
+          (data.author ? '<span>· ' + esc(data.author) + '</span>' : '') +
+        '</div>' +
+        '<div class="article-content">' + html + '</div>' +
+        (tags ? '<div class="article-tags">' + tags + '</div>' : '');
+    }
+
+    var slug = getSlug();
+    if (!slug) {
+      root.innerHTML = '<div class="article-error">缺少文章識別碼</div>';
+      return;
+    }
+    fetch('data/articles/' + encodeURIComponent(slug) + '.json?v=' + Date.now())
+      .then(function (r) {
+        if (!r.ok) throw new Error('not found');
+        return r.json();
+      })
+      .then(render)
+      .catch(function () {
+        root.innerHTML = '<div class="article-error">找不到這篇文章</div>';
+      });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>消息公告</title>
+  <meta name="description" content="阿煙的最新消息與文章。">
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; font-family: var(--font-body); }
+  </style>
+</head>
+<body>
+  <div class="articles-page">
+    <div class="articles-header">
+      <a href="index.html" class="articles-back">&larr; 返回首頁</a>
+      <h1>消息公告</h1>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">最新活動、更新與創作紀錄</p>
+    </div>
+
+    <div class="articles-filters" id="articlesFilters"></div>
+
+    <div class="articles-grid" id="articlesGrid">
+      <div class="articles-empty" id="articlesLoading">載入中…</div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    var grid = document.getElementById('articlesGrid');
+    var filters = document.getElementById('articlesFilters');
+    var allArticles = [];
+    var activeTag = '';
+
+    function esc(s) {
+      var d = document.createElement('div');
+      d.textContent = s == null ? '' : s;
+      return d.innerHTML;
+    }
+
+    function formatDate(d) {
+      if (!d) return '';
+      var parts = d.split('-');
+      if (parts.length !== 3) return d;
+      return parts[0] + ' / ' + parts[1] + ' / ' + parts[2];
+    }
+
+    function render() {
+      var list = allArticles.filter(function (a) { return !a.draft; });
+      if (activeTag) list = list.filter(function (a) { return (a.tags || []).indexOf(activeTag) >= 0; });
+      // sort: pinned first, then date desc
+      list.sort(function (a, b) {
+        if ((b.pinned ? 1 : 0) !== (a.pinned ? 1 : 0)) return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0);
+        return (b.date || '').localeCompare(a.date || '');
+      });
+
+      if (!list.length) {
+        grid.innerHTML = '<div class="articles-empty" style="grid-column:1/-1;">目前沒有文章</div>';
+        return;
+      }
+      grid.innerHTML = list.map(function (a) {
+        var cover = a.cover
+          ? '<div class="article-card-cover"><img src="' + esc(a.cover) + '" alt="" loading="lazy"></div>'
+          : '';
+        var tags = (a.tags || []).slice(0, 3).map(function (t) {
+          return '<span class="article-card-tag">' + esc(t) + '</span>';
+        }).join('');
+        var pinned = a.pinned ? '<span class="article-card-pinned">★ 置頂</span>' : '';
+        return '<a class="article-card" href="article.html?slug=' + encodeURIComponent(a.slug) + '">' +
+          cover +
+          '<div class="article-card-body">' +
+            '<div class="article-card-meta">' + pinned + '<span>' + esc(formatDate(a.date)) + '</span></div>' +
+            '<div class="article-card-title">' + esc(a.title || '(未命名)') + '</div>' +
+            (a.excerpt ? '<div class="article-card-excerpt">' + esc(a.excerpt) + '</div>' : '') +
+            (tags ? '<div class="article-card-tags">' + tags + '</div>' : '') +
+          '</div>' +
+        '</a>';
+      }).join('');
+    }
+
+    function renderFilters() {
+      var tagSet = {};
+      allArticles.forEach(function (a) {
+        if (a.draft) return;
+        (a.tags || []).forEach(function (t) { tagSet[t] = (tagSet[t] || 0) + 1; });
+      });
+      var tags = Object.keys(tagSet).sort(function (a, b) { return tagSet[b] - tagSet[a]; });
+      if (!tags.length) { filters.innerHTML = ''; return; }
+      var html = '<button class="articles-filter-chip' + (activeTag === '' ? ' active' : '') + '" data-tag="">全部</button>';
+      tags.forEach(function (t) {
+        html += '<button class="articles-filter-chip' + (t === activeTag ? ' active' : '') + '" data-tag="' + esc(t) + '">' + esc(t) + ' (' + tagSet[t] + ')</button>';
+      });
+      filters.innerHTML = html;
+      filters.querySelectorAll('.articles-filter-chip').forEach(function (b) {
+        b.addEventListener('click', function () {
+          activeTag = b.dataset.tag;
+          renderFilters();
+          render();
+        });
+      });
+    }
+
+    fetch('data/articles/index.json?v=' + Date.now())
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (list) {
+        allArticles = list || [];
+        renderFilters();
+        render();
+      })
+      .catch(function () {
+        grid.innerHTML = '<div class="articles-empty" style="grid-column:1/-1;">無法載入消息</div>';
+      });
+  })();
+  </script>
+</body>
+</html>
