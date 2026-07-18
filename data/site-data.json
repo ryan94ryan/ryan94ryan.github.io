@@ -287,11 +287,11 @@
   },
   "navOrder": [
     {
-      "type": "custom",
-      "label": "銀狼祭品遊戲",
-      "url": "https://ryan94ryan.com/silverwolfgame/",
-      "featured": true,
-      "newTab": true
+      "type": "article"
+    },
+    {
+      "type": "builtin",
+      "key": "support"
     },
     {
       "type": "builtin",
@@ -299,38 +299,25 @@
     },
     {
       "type": "builtin",
-      "key": "gallery"
-    },
-    {
-      "type": "builtin",
-      "key": "playlists"
-    },
-    {
-      "type": "builtin",
-      "key": "videoShowcase"
-    },
-    {
-      "type": "builtin",
       "key": "contentFeed"
-    },
-    {
-      "type": "builtin",
-      "key": "services"
-    },
-    {
-      "type": "builtin",
-      "key": "liveSchedule"
     },
     {
       "type": "builtin",
       "key": "about"
     },
     {
-      "type": "builtin",
-      "key": "support"
-    },
-    {
-      "type": "article"
+      "type": "custom",
+      "label": "銀狼祭品遊戲",
+      "url": "https://ryan94ryan.com/silverwolfgame/",
+      "featured": false,
+      "newTab": true
     }
-  ]
+  ],
+  "layout": {
+    "gamesPerRow": "4",
+    "gameCardAspect": "square",
+    "feedColumns": "3",
+    "sectionSpacing": "compact",
+    "navHover": "glow"
+  }
 }
