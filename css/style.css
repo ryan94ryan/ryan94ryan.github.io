@@ -1662,6 +1662,11 @@ body.wireframe-mode .floating-notices {
   outline-offset: -2px;
   position: relative;
 }
+/* Empty / collapsed 公告 containers: no stray outline in wireframe mode */
+body.wireframe-mode .notice-bar.wf-empty,
+body.wireframe-mode .floating-notices.wf-empty {
+  outline: none !important;
+}
 body.wireframe-mode [data-wlabel]::before {
   content: attr(data-wlabel);
   position: absolute;
@@ -1943,6 +1948,60 @@ body.wireframe-mode .floating-notice-link {
   font-size: 0.8rem;
   padding: 4px 12px;
 }
+
+/* ============================================================
+   Layout / appearance knobs — driven by data.layout via main.js
+   (CSS-var / body-class based; all have safe defaults so the
+   site looks identical when no layout settings are present).
+   ============================================================ */
+@media (min-width: 768px) {
+  .games-grid { grid-template-columns: repeat(var(--games-cols, 4), 1fr); }
+}
+.game-card-image { aspect-ratio: var(--game-card-aspect, 16 / 9); }
+
+/* Content feed — only the regular-video row (#ytGrid) is a single-row horizontal
+   scroller. Shorts and Instagram keep their original wrapping grid. --feed-cols =
+   how many videos show at once (default 4); more than that → scroll sideways. */
+.yt-grid {
+  display: flex;
+  grid-template-columns: none;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  cursor: grab;
+}
+.yt-grid.is-grabbing { cursor: grabbing; scroll-snap-type: none; }
+.yt-grid > * {
+  flex: 0 0 calc((100% - (var(--feed-cols, 4) - 1) * 1rem) / var(--feed-cols, 4));
+  scroll-snap-align: start;
+  min-width: 0;
+}
+@media (max-width: 900px) { .yt-grid > * { flex-basis: calc((100% - 1rem) / 2); } }
+@media (max-width: 560px) { .yt-grid > * { flex-basis: 82%; } }
+
+/* Section vertical spacing presets (override the shared --section-padding) */
+body.spacing-compact { --section-padding: 2.5rem 1.25rem; }
+body.spacing-roomy   { --section-padding: 6.5rem 1.25rem; }
+
+/* Nav hover effect presets (default = the built-in underline) */
+body.nav-hover-none .nav-links a::after { width: 0 !important; }
+body.nav-hover-glow .nav-links a::after { display: none; }
+body.nav-hover-glow .nav-links a:not(.nav-featured):hover { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+body.nav-hover-pill .nav-links a::after { display: none; }
+body.nav-hover-pill .nav-links a:not(.nav-featured) { padding: 6px 12px; border-radius: 20px; transition: background 0.2s ease, color 0.2s ease; }
+body.nav-hover-pill .nav-links a:not(.nav-featured):hover { background: var(--accent); color: #fff; }
+
+/* Consistent game cards: cards in a row are equal height (grid stretch) and the
+   action button is pinned to the bottom, so all buttons line up regardless of
+   how much text / how many tags each card has. */
+.games-grid .game-card { display: flex; flex-direction: column; }
+.games-grid .game-card-image { flex-shrink: 0; }
+.games-grid .game-card-body { flex: 1 1 auto; display: flex; flex-direction: column; }
+.games-grid .game-tags { margin-bottom: 0.75rem; }
+.games-grid .game-links { margin-top: auto; }
 
 .article-loading,
 .article-error {
