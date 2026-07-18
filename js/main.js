@@ -470,7 +470,10 @@
     var featuredEl = el('gameFeatured');
     featured.forEach(function (g) { featuredEl.innerHTML += buildGameCard(g); });
 
-    var VISIBLE_COUNT = 3;
+    // Show whole rows before the "查看全部" toggle, so the grid never leaves a
+    // half-filled row (e.g. 4 columns → show 8, then hide the rest).
+    var cols = parseInt((data.layout && data.layout.gamesPerRow) || 4, 10) || 4;
+    var VISIBLE_COUNT = cols * 2;
     var visibleGames = others.slice(0, VISIBLE_COUNT);
     var hiddenGames = others.slice(VISIBLE_COUNT);
 
@@ -518,14 +521,15 @@
       ? '<img src="' + esc(game.image) + '" alt="' + esc(game.name) + '" loading="lazy" onerror="this.parentElement.classList.add(\'img-placeholder\');this.style.display=\'none\'">'
       : '';
 
-    return '<div class="game-card">' +
+    var itemAttr = game.id ? ' data-edit-item="games" data-edit-key="' + esc(game.id) + '"' : '';
+    return '<div class="game-card"' + itemAttr + '>' +
       '<div class="game-card-image' + (!game.image ? ' img-placeholder' : '') + '">' + imgHtml +
         '<div class="game-platforms">' + platformBadges + '</div>' +
       '</div>' +
       '<div class="game-card-body">' +
-        '<h3 class="game-card-title">' + esc(game.name) + '</h3>' +
-        '<p class="game-card-genre">' + esc(game.genre || '') + '</p>' +
-        (game.description ? '<p class="game-card-desc">' + esc(game.description) + '</p>' : '') +
+        '<h3 class="game-card-title" data-edit-field="name">' + esc(game.name) + '</h3>' +
+        '<p class="game-card-genre" data-edit-field="genre">' + esc(game.genre || '') + '</p>' +
+        (game.description ? '<p class="game-card-desc" data-edit-field="description">' + esc(game.description) + '</p>' : '') +
         (tags ? '<div class="game-tags">' + tags + '</div>' : '') +
         '<div class="game-links">' + links + '</div>' +
       '</div></div>';
@@ -791,7 +795,7 @@
     container.innerHTML =
       '<img src="' + esc(about.avatar || 'assets/images/avatar.jpg') + '" alt="頭像" class="about-avatar" onerror="this.style.background=\'var(--accent-light)\'">' +
       '<div class="about-text">' +
-        '<p class="about-bio">' + bioLines + '</p>' +
+        '<p class="about-bio" data-edit="about.bio" data-edit-multiline>' + bioLines + '</p>' +
         '<div class="about-skills">' + skills + '</div>' +
         (about.collaborationNote ? '<p class="about-collab">' + esc(about.collaborationNote) + '</p>' : '') +
         emailHtml +
@@ -974,6 +978,10 @@
     initLightbox();
     loadAboutNotices();
 
+    // Inside the desktop editor the admin pushes data in via postMessage
+    // ('preview-update'); skip the on-disk fetch so it can't race/overwrite it.
+    if (window.__EDITOR__) return;
+
     fetch('data/site-data.json?v=' + Date.now())
       .then(function (res) {
         if (!res.ok) throw new Error('Failed to load');
@@ -1007,8 +1015,64 @@
     if (gt) gt.style.display = 'none';
   }
 
+  /* ---------- Layout / appearance knobs (data-driven, CSS-var based) ---------- */
+  function applyLayout(data) {
+    var L = data.layout || {};
+    var root = document.documentElement;
+    var body = document.body;
+
+    // games per row
+    if (L.gamesPerRow) root.style.setProperty('--games-cols', String(parseInt(L.gamesPerRow, 10) || 4));
+    else root.style.removeProperty('--games-cols');
+
+    // content feed columns
+    if (L.feedColumns) root.style.setProperty('--feed-cols', String(parseInt(L.feedColumns, 10) || 2));
+    else root.style.removeProperty('--feed-cols');
+
+    // section vertical spacing
+    body.classList.remove('spacing-compact', 'spacing-roomy');
+    if (L.sectionSpacing === 'compact') body.classList.add('spacing-compact');
+    else if (L.sectionSpacing === 'roomy') body.classList.add('spacing-roomy');
+
+    // nav hover effect
+    body.classList.remove('nav-hover-none', 'nav-hover-glow', 'nav-hover-pill');
+    if (L.navHover && L.navHover !== 'underline') body.classList.add('nav-hover-' + L.navHover);
+  }
+
+  /* ---------- Drag / wheel horizontal scroll for the content feed ---------- */
+  function enableDragScroll(el) {
+    if (!el || el.__dragScroll) return;
+    el.__dragScroll = true;
+    var down = false, startX = 0, startLeft = 0;
+    el.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('iframe')) return; // iframes handle their own pointer events
+      down = true; startX = e.clientX; startLeft = el.scrollLeft;
+      el.classList.add('is-grabbing');
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      el.scrollLeft = startLeft - (e.clientX - startX);
+    });
+    function end() { down = false; el.classList.remove('is-grabbing'); }
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    // vertical wheel → horizontal scroll (over the non-iframe areas)
+    el.addEventListener('wheel', function (e) {
+      if (el.scrollWidth <= el.clientWidth) return;
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { el.scrollLeft += e.deltaY; e.preventDefault(); }
+    }, { passive: false });
+  }
+  function initContentScrollers() {
+    // Only the regular-video row scrolls horizontally. Shorts + Instagram stay
+    // as their original wrapping grids (no drag).
+    var el = document.getElementById('ytGrid');
+    if (el) enableDragScroll(el);
+  }
+
   function render(data) {
     clearRendered();
+    applyLayout(data);
 
     // Apply site meta
     var site = data.site || {};
@@ -1047,6 +1111,11 @@
     renderNotices(data);
 
     requestAnimationFrame(function () { initScrollAnimations(); });
+    requestAnimationFrame(initContentScrollers);
+
+    // Signal that a full render pass is done (used by the desktop editor's overlay
+    // to (re)attach inline-editing behaviour). Inert on the live site.
+    try { window.dispatchEvent(new CustomEvent('site:rendered')); } catch (e) { /* ignore */ }
   }
 
   /* ---------- Preview Helpers ---------- */
@@ -1102,10 +1171,22 @@
     if (banner) banner.setAttribute('data-wlabel', '首頁輪播');
     var footer = document.querySelector('footer.footer');
     if (footer) footer.setAttribute('data-wlabel', '頁尾 Footer');
+    // Notice containers: only outline/label them when they actually have visible
+    // content — otherwise an empty/collapsed 公告 looks like a stray box.
     var bar = document.getElementById('noticeBar');
-    if (bar) bar.setAttribute('data-wlabel', '頂部公告');
+    if (bar) {
+      var barShown = bar.style.display !== 'none' && bar.offsetHeight > 2;
+      bar.classList.toggle('wf-empty', !barShown);
+      if (barShown) bar.setAttribute('data-wlabel', '頂部公告');
+      else bar.removeAttribute('data-wlabel');
+    }
     var floating = document.getElementById('floatingNotices');
-    if (floating) floating.setAttribute('data-wlabel', '浮動公告');
+    if (floating) {
+      var hasFloat = floating.children.length > 0;
+      floating.classList.toggle('wf-empty', !hasFloat);
+      if (hasFloat) floating.setAttribute('data-wlabel', '浮動公告');
+      else floating.removeAttribute('data-wlabel');
+    }
   }
 
   /* ---------- Preview Message Listener ---------- */
