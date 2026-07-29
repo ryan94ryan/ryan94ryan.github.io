@@ -61,6 +61,23 @@
       "featured": true
     },
     {
+      "id": "game-ms5u0w7e",
+      "name": "老虎機勇者",
+      "genre": "隨機",
+      "description": "104有八成的遊戲企劃條件都要會slot，不想跟時代脫節，所以我學了一下",
+      "image": "assets/images/games/icon-ms5u2n4o.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "https://play.google.com/store/apps/details?id=com.RAstu.gameblehero"
+      },
+      "tags": [
+        "肉鴿"
+      ],
+      "featured": false
+    },
+    {
       "id": "ryanpuzzle",
       "name": "隨意拼圖 作者自己也會卡關",
       "genre": "益智拼圖",
