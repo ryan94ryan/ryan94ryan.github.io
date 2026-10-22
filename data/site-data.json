@@ -42,6 +42,21 @@
   },
   "games": [
     {
+      "id": "wuxiaschool",
+      "name": "成立最強門派",
+      "genre": "模擬經營",
+      "description": "我想做模擬經營的遊戲",
+      "image": "assets/images/games/gameicon-mvjqdidd.png",
+      "platforms": [
+        "Android"
+      ],
+      "links": {
+        "android": "成立最強門派"
+      },
+      "tags": [],
+      "featured": false
+    },
+    {
       "id": "avoid-death",
       "name": "迴避我的死亡結局",
       "genre": "武俠文字冒險 RPG",
